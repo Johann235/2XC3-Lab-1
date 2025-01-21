@@ -4,6 +4,10 @@ import timeit
 import matplotlib.pyplot as plt
 import numpy as np
 
+##Set Max recursion
+import sys
+sys.setrecursionlimit(10000)
+
 # Utitilty functions - some are implemented, others you must implement yourself.
 
 # function to plot the bar graph and average runtimes of N trials
@@ -14,6 +18,7 @@ def draw_plot(run_arr, mean, plot_title):
     fig=plt.figure(figsize=(20,8))
     plt.bar(x,run_arr)
     plt.axhline(mean,color="red",linestyle="--",label="Avg")
+    plt.text(mean, 10, f'Mean: {mean:.2f}', color='red', fontsize=12)
     plt.xlabel("Iterations")
     plt.ylabel("Run time in ms order of 1e-6")
     plt.title(plot_title)
@@ -32,7 +37,9 @@ def create_random_list(length, max_value, item=None, item_index=None):
 
 # function to generate reversed list of a given size and with a given maximum value
 def create_reverse_list(length, max_value, item=None, item_index=None):
-    reversed_list = [(max_value - i) for i in range (length)]
+    reversed_list = create_random_list(length,max_value)
+    reversed_list.sort()
+    reversed_list.reverse()
 
     return reversed_list
 
@@ -145,7 +152,7 @@ class MergeSort:
         MergeSort.aux = L.copy()
         left = low
         right = mid + 1
-        for i in range (len(L)):
+        for i in range (low, high + 1 ):
             MergeSort.aux[i] = L[i]
             
         
@@ -333,17 +340,28 @@ def experiment_D():
 
     return 0
 
-    
 def experiment_E():
     
     # Insert your code for experiment E design here 
+    toSort = create_reverse_list(5000,5000) 
+    N = 100
+    bubble_sort_E = BubbleSort(toSort)
+    insertion_sort_E = InsertionSort(toSort)
+    selection_sort_E = SelectionSort(toSort)
+    merge_sort_E = MergeSort(toSort)
+    quick_sort_E = QuickSort(toSort)
 
+    runExperiment(bubble_sort_E,N, "Bubble Sort Experiment E")
+    runExperiment(insertion_sort_E,N, "Insert Sort Experiment E")
+    runExperiment(selection_sort_E,N, "Selection Sort Experiment E")
+    runExperiment(merge_sort_E,N, "Merge Sort Experiment E")
+    runExperiment(quick_sort_E,N, "Quick Sort Experiment E")
     return 0
 
 # call each experiment
 #experiment_A()
 #experiment_B()
-#experiment_C()
-#experiment_D()
-#experiment_E()
+experiment_C()
+experiment_D()
+experiment_E()
 
