@@ -272,8 +272,8 @@ def runExperiment(sortObject, N, title):
         sortObject.get_sorted()
         stop = timeit.default_timer()
         run_times.append((stop - start) * (10**6))
-    bubbleSortAverage = np.sum(run_times)/len(run_times)
-    draw_plot(run_times,bubbleSortAverage, title)
+    average = np.sum(run_times)/len(run_times)
+    draw_plot(run_times,average, title)
 
 # run all algorithms
 def experiment_A():
@@ -281,7 +281,7 @@ def experiment_A():
     # Insert your code for experiment A design here
 
     ##Generate random list and set number of times to run experiment
-    toSort = create_random_list(10000,10000) 
+    toSort = create_random_list(10000,15000) 
     N = 80
     bubble_sort_A = BubbleSort(toSort)
     insertion_sort_A = InsertionSort(toSort)
@@ -301,7 +301,7 @@ def experiment_B():
     
     # Insert your code for experiment B design here 
 
-    toSort = create_near_sorted_list(5000,5000) 
+    toSort = create_near_sorted_list(5000,10000) 
     N = 100
     bubble_sort_B = BubbleSort(toSort)
     insertion_sort_B = InsertionSort(toSort)
@@ -319,7 +319,7 @@ def experiment_B():
 def experiment_C():
     
     # Insert your code for experiment C design here 
-    toSort = create_reverse_list(10000,10000) 
+    toSort = create_reverse_list(10000,15000) 
     N = 100
     bubble_sort_C = BubbleSort(toSort)
     insertion_sort_C = InsertionSort(toSort)
@@ -334,16 +334,59 @@ def experiment_C():
     runExperiment(quick_sort_C,N, "Quick Sort Experiment C")
     return 0
 
+def draw_plot_D(run_arr, mean, plot_title):
+    x = ["50","500","1000","2000","5000"]
+    fig=plt.figure(figsize=(20,8))
+    plt.bar(x, run_arr, width = 0.6,align = "center")
+    plt.axhline(mean,color="red",linestyle="--",label="Avg")
+    plt.text(mean, 10, f'Mean: {mean:.2f}', color='red', fontsize=12)
+    plt.xlabel("List Size")
+    plt.ylabel("Average run time in seconds")
+    plt.title(plot_title)
+    plt.savefig(plot_title)
+
+def runExperimentD(sortObjects, N, title):
+    averages = []
+    for sortObject in sortObjects:
+        run_times = []
+        for i in range (N):
+            start = timeit.default_timer()
+            sortObject.get_sorted()
+            stop = timeit.default_timer()
+            run_times.append((stop - start))
+        average = np.sum(run_times)/len(run_times)
+        averages.append(average)
+    averageOfAverages = np.sum(averages)/len(averages)
+    draw_plot_D(averages,averageOfAverages, title)
+
 def experiment_D():
     
     # Insert your code for experiment D design here 
+    toSortOne = create_random_list(50,75) 
+    toSortTwo = create_random_list(500,750)
+    toSortThree = create_random_list(1000,1500)
+    toSortFour = create_random_list(2000,3000)
+    toSortFive = create_random_list(5000,7500)
+    N = 80
+
+    bubble_sort_D = [BubbleSort(toSortOne),BubbleSort(toSortTwo),BubbleSort(toSortThree),BubbleSort(toSortFour),BubbleSort(toSortFive)]
+    insertion_sort_D = [InsertionSort(toSortOne),InsertionSort(toSortTwo), InsertionSort(toSortThree), InsertionSort(toSortFour), InsertionSort(toSortFive) ]
+    selection_sort_D = [SelectionSort(toSortOne),SelectionSort(toSortTwo),SelectionSort(toSortThree),SelectionSort(toSortFour),SelectionSort(toSortFive)]
+    merge_sort_D = [MergeSort(toSortOne),MergeSort(toSortTwo),MergeSort(toSortThree),MergeSort(toSortFour),MergeSort(toSortFive)]
+    quick_sort_D = [QuickSort(toSortOne),QuickSort(toSortTwo),QuickSort(toSortThree),QuickSort(toSortFour),QuickSort(toSortFive)]
+
+    runExperimentD(bubble_sort_D,N, "Bubble Sort Experiment D")
+    runExperimentD(insertion_sort_D,N, "Insert Sort Experiment D")
+    runExperimentD(selection_sort_D,N, "Selection Sort Experiment D")
+    runExperimentD(merge_sort_D,N, "Merge Sort Experiment D")
+    runExperimentD(quick_sort_D,N, "Quick Sort Experiment D")
 
     return 0
 
 def experiment_E():
     
     # Insert your code for experiment E design here 
-    toSort = create_reverse_list(5000,5000) 
+    toSort = create_reverse_list(5000,10000) 
     N = 100
     bubble_sort_E = BubbleSort(toSort)
     insertion_sort_E = InsertionSort(toSort)
@@ -361,7 +404,7 @@ def experiment_E():
 # call each experiment
 #experiment_A()
 #experiment_B()
-experiment_C()
+#experiment_C()
 experiment_D()
-experiment_E()
+#experiment_E()
 
