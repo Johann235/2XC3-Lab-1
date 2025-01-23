@@ -18,9 +18,9 @@ def draw_plot(run_arr, mean, plot_title):
     fig=plt.figure(figsize=(20,8))
     plt.bar(x,run_arr)
     plt.axhline(mean,color="red",linestyle="--",label="Avg")
-    plt.text(mean, 10, f'Mean: {mean:.2f}', color='red', fontsize=12)
+    plt.legend([f"Average: {mean} ms"])
     plt.xlabel("Iterations")
-    plt.ylabel("Run time in ms order of 1e-6")
+    plt.ylabel("Run time in ms order of 1e-3")
     plt.title(plot_title)
     plt.savefig(plot_title)
     ##plt.show()
@@ -265,146 +265,252 @@ quick_sort.quick_sort()
 print("Quick Sort: ",quick_sort.get_sorted())
 
 
-def runExperiment(sortObject, N, title):
-    run_times = []
-    for i in range (N):
-        start = timeit.default_timer()
-        sortObject.get_sorted()
-        stop = timeit.default_timer()
-        run_times.append((stop - start) * (10**6))
-    average = np.sum(run_times)/len(run_times)
-    draw_plot(run_times,average, title)
+def runExperiment(sortObject):
+    start = timeit.default_timer()
+    sortObject.get_sorted()
+    stop = timeit.default_timer()
+    return ((stop-start) * (10**3))
 
 # run all algorithms
 def experiment_A():
     
     # Insert your code for experiment A design here
-
-    ##Generate random list and set number of times to run experiment
-    toSort = create_random_list(10000,15000) 
+    #Number of experiment runs    
     N = 80
-    bubble_sort_A = BubbleSort(toSort)
-    insertion_sort_A = InsertionSort(toSort)
-    selection_sort_A = SelectionSort(toSort)
-    merge_sort_A = MergeSort(toSort)
-    quick_sort_A = QuickSort(toSort)
 
-    runExperiment(bubble_sort_A,N, "Bubble Sort Experiment A")
-    runExperiment(insertion_sort_A,N, "Insert Sort Experiment A")
-    runExperiment(selection_sort_A,N, "Selection Sort Experiment A")
-    runExperiment(merge_sort_A,N, "Merge Sort Experiment A")
-    runExperiment(quick_sort_A,N, "Quick Sort Experiment A")
+    #Initalize run time array for each sort
+    bubbleSortTimes = []
+    insertionSortTimes = []
+    selectionSortTimes = []
+    mergeSortTimes = []
+    quickSortTimes = []
 
+    #Run experiment N times on each sort
+    for i in range(N):
+        toSort = create_random_list(10000,20000) 
+        bubble_sort_A = BubbleSort(toSort)
+        insertion_sort_A = InsertionSort(toSort)
+        selection_sort_A = SelectionSort(toSort)
+        merge_sort_A = MergeSort(toSort)
+        quick_sort_A = QuickSort(toSort)
+        bubbleSortTimes.append(runExperiment(bubble_sort_A))
+        insertionSortTimes.append(runExperiment(insertion_sort_A))
+        selectionSortTimes.append(runExperiment(selection_sort_A))
+        mergeSortTimes.append(runExperiment(merge_sort_A))
+        quickSortTimes.append(runExperiment(quick_sort_A))
+
+    #Calculate averages for each one
+    bubbleAverage = np.sum(bubbleSortTimes)/len(bubbleSortTimes)
+    insertAverage = np.sum(insertionSortTimes)/len(insertionSortTimes)
+    selectionAverage = np.sum(selectionSortTimes)/len(selectionSortTimes)
+    mergeSortAverage = np.sum(mergeSortTimes)/len(mergeSortTimes)
+    quickSortAverage = np.sum(quickSortTimes)/len(quickSortTimes)
+
+    #Save graphs
+    draw_plot(bubbleSortTimes,bubbleAverage, "Bubble Sort Experiment A")
+    draw_plot(insertionSortTimes,insertAverage, "Insert Sort Experiment A")
+    draw_plot(selectionSortTimes,selectionAverage, "Selection Sort Experiment A")
+    draw_plot(mergeSortTimes,mergeSortAverage, "Merge Sort Experiment A")
+    draw_plot(quickSortTimes,quickSortAverage, "Quick Sort Experiment A")
     return 0
 
 def experiment_B():
     
-    # Insert your code for experiment B design here 
-
-    toSort = create_near_sorted_list(5000,10000) 
+    # Insert your code for experiment B design here     
     N = 100
-    bubble_sort_B = BubbleSort(toSort)
-    insertion_sort_B = InsertionSort(toSort)
-    selection_sort_B = SelectionSort(toSort)
-    merge_sort_B = MergeSort(toSort)
-    quick_sort_B = QuickSort(toSort)
+    #Initalize run time array for each sort
+    bubbleSortTimes = []
+    insertionSortTimes = []
+    selectionSortTimes = []
+    mergeSortTimes = []
+    quickSortTimes = []
 
-    runExperiment(bubble_sort_B,N, "Bubble Sort Experiment B")
-    runExperiment(insertion_sort_B,N, "Insert Sort Experiment B")
-    runExperiment(selection_sort_B,N, "Selection Sort Experiment B")
-    runExperiment(merge_sort_B,N, "Merge Sort Experiment B")
-    runExperiment(quick_sort_B,N, "Quick Sort Experiment B")
+    for i in range(N):
+        toSort = create_near_sorted_list(5000,10000) 
+        bubble_sort_B = BubbleSort(toSort)
+        insertion_sort_B = InsertionSort(toSort)
+        selection_sort_B = SelectionSort(toSort)
+        merge_sort_B = MergeSort(toSort)
+        quick_sort_B = QuickSort(toSort)
+
+        bubbleSortTimes.append(runExperiment(bubble_sort_B))
+        insertionSortTimes.append(runExperiment(insertion_sort_B))
+        selectionSortTimes.append(runExperiment(selection_sort_B))
+        mergeSortTimes.append(runExperiment(merge_sort_B))
+        quickSortTimes.append(runExperiment(quick_sort_B))
+
+    #Calculate averages for each one
+    bubbleAverage = np.sum(bubbleSortTimes)/len(bubbleSortTimes)
+    insertAverage = np.sum(insertionSortTimes)/len(insertionSortTimes)
+    selectionAverage = np.sum(selectionSortTimes)/len(selectionSortTimes)
+    mergeSortAverage = np.sum(mergeSortTimes)/len(mergeSortTimes)
+    quickSortAverage = np.sum(quickSortTimes)/len(quickSortTimes)
+
+    #Save graphs
+    draw_plot(bubbleSortTimes,bubbleAverage, "Bubble Sort Experiment B")
+    draw_plot(insertionSortTimes,insertAverage, "Insert Sort Experiment B")
+    draw_plot(selectionSortTimes,selectionAverage, "Selection Sort Experiment B")
+    draw_plot(mergeSortTimes,mergeSortAverage, "Merge Sort Experiment B")
+    draw_plot(quickSortTimes,quickSortAverage, "Quick Sort Experiment B")
     return 0
 
 def experiment_C():
     
     # Insert your code for experiment C design here 
-    toSort = create_reverse_list(10000,15000) 
     N = 100
-    bubble_sort_C = BubbleSort(toSort)
-    insertion_sort_C = InsertionSort(toSort)
-    selection_sort_C = SelectionSort(toSort)
-    merge_sort_C = MergeSort(toSort)
-    quick_sort_C = QuickSort(toSort)
+    bubbleSortTimes = []
+    insertionSortTimes = []
+    selectionSortTimes = []
+    mergeSortTimes = []
+    quickSortTimes = []
 
-    runExperiment(bubble_sort_C,N, "Bubble Sort Experiment C")
-    runExperiment(insertion_sort_C,N, "Insert Sort Experiment C")
-    runExperiment(selection_sort_C,N, "Selection Sort Experiment C")
-    runExperiment(merge_sort_C,N, "Merge Sort Experiment C")
-    runExperiment(quick_sort_C,N, "Quick Sort Experiment C")
+    for i in range(N):
+        toSort = create_reverse_list(10000,20000) 
+        bubble_sort_C = BubbleSort(toSort)
+        insertion_sort_C = InsertionSort(toSort)
+        selection_sort_C = SelectionSort(toSort)
+        merge_sort_C = MergeSort(toSort)
+        quick_sort_C = QuickSort(toSort)
+
+        bubbleSortTimes.append(runExperiment(bubble_sort_C))
+        insertionSortTimes.append(runExperiment(insertion_sort_C))
+        selectionSortTimes.append(runExperiment(selection_sort_C))
+        mergeSortTimes.append(runExperiment(merge_sort_C))
+        quickSortTimes.append(runExperiment(quick_sort_C))
+
+    #Calculate averages for each one
+    bubbleAverage = np.sum(bubbleSortTimes)/len(bubbleSortTimes)
+    insertAverage = np.sum(insertionSortTimes)/len(insertionSortTimes)
+    selectionAverage = np.sum(selectionSortTimes)/len(selectionSortTimes)
+    mergeSortAverage = np.sum(mergeSortTimes)/len(mergeSortTimes)
+    quickSortAverage = np.sum(quickSortTimes)/len(quickSortTimes)
+
+    #Save graphs
+    draw_plot(bubbleSortTimes,bubbleAverage, "Bubble Sort Experiment C")
+    draw_plot(insertionSortTimes,insertAverage, "Insert Sort Experiment C")
+    draw_plot(selectionSortTimes,selectionAverage, "Selection Sort Experiment C")
+    draw_plot(mergeSortTimes,mergeSortAverage, "Merge Sort Experiment C")
+    draw_plot(quickSortTimes,quickSortAverage, "Quick Sort Experiment C")
     return 0
 
 def draw_plot_D(run_arr, mean, plot_title):
     x = ["50","500","1000","2000","5000"]
     fig=plt.figure(figsize=(20,8))
-    plt.bar(x, run_arr, width = 0.6,align = "center")
+    plt.bar(x, run_arr, width = 0.6,align = "center", color = ["blue","red","orange","purple","green"],
+            label = [f"Size 1 Average: {run_arr[0]} ms",f"Size 2 Average: {run_arr[1]} ms",f"Size 3 Average: {run_arr[2]} ms",f"Size 4 Average: {run_arr[3]} ms",f"Size 5 Average: {run_arr[4]} ms"])
     plt.axhline(mean,color="red",linestyle="--",label="Avg")
-    plt.text(mean, 10, f'Mean: {mean:.2f}', color='red', fontsize=12)
+    plt.legend(loc='upper left', bbox_to_anchor=(0, 1), fontsize=10)
+    #plt.legend([f"Size 1 Average: {run_arr[0]} ms",f"Size 2 Average: {run_arr[1]} ms",f"Size 3 Average: {run_arr[2]} ms",f"Size 4 Average: {run_arr[3]} ms",f"Size 5 Average: {run_arr[4]} ms"])
     plt.xlabel("List Size")
-    plt.ylabel("Average run time in seconds")
+    plt.ylabel("Average run time in ms")
     plt.title(plot_title)
     plt.savefig(plot_title)
+    
 
-def runExperimentD(sortObjects, N, title):
-    averages = []
+def runExperimentD(sortObjects):
+    runTimes = []
     for sortObject in sortObjects:
-        run_times = []
-        for i in range (N):
-            start = timeit.default_timer()
-            sortObject.get_sorted()
-            stop = timeit.default_timer()
-            run_times.append((stop - start))
-        average = np.sum(run_times)/len(run_times)
-        averages.append(average)
-    averageOfAverages = np.sum(averages)/len(averages)
-    draw_plot_D(averages,averageOfAverages, title)
+        start = timeit.default_timer()
+        sortObject.get_sorted()
+        stop = timeit.default_timer()
+        runTimes.append((stop-start) * (10 **3 ))
+    return runTimes
+
 
 def experiment_D():
     
     # Insert your code for experiment D design here 
-    toSortOne = create_random_list(50,75) 
-    toSortTwo = create_random_list(500,750)
-    toSortThree = create_random_list(1000,1500)
-    toSortFour = create_random_list(2000,3000)
-    toSortFive = create_random_list(5000,7500)
     N = 80
+    bubbleSortTimes = [[],[],[],[],[]]
+    insertionSortTimes = [[],[],[],[],[]]
+    selectionSortTimes = [[],[],[],[],[]]
+    mergeSortTimes = [[],[],[],[],[]]
+    quickSortTimes = [[],[],[],[],[]]
 
-    bubble_sort_D = [BubbleSort(toSortOne),BubbleSort(toSortTwo),BubbleSort(toSortThree),BubbleSort(toSortFour),BubbleSort(toSortFive)]
-    insertion_sort_D = [InsertionSort(toSortOne),InsertionSort(toSortTwo), InsertionSort(toSortThree), InsertionSort(toSortFour), InsertionSort(toSortFive) ]
-    selection_sort_D = [SelectionSort(toSortOne),SelectionSort(toSortTwo),SelectionSort(toSortThree),SelectionSort(toSortFour),SelectionSort(toSortFive)]
-    merge_sort_D = [MergeSort(toSortOne),MergeSort(toSortTwo),MergeSort(toSortThree),MergeSort(toSortFour),MergeSort(toSortFive)]
-    quick_sort_D = [QuickSort(toSortOne),QuickSort(toSortTwo),QuickSort(toSortThree),QuickSort(toSortFour),QuickSort(toSortFive)]
+    for i in range (N):
+        toSortOne = create_random_list(50,100) 
+        toSortTwo = create_random_list(500,1000)
+        toSortThree = create_random_list(1000,2000)
+        toSortFour = create_random_list(2000,4000)
+        toSortFive = create_random_list(5000,10000)
+        bubble_sort_D = [BubbleSort(toSortOne),BubbleSort(toSortTwo),BubbleSort(toSortThree),BubbleSort(toSortFour),BubbleSort(toSortFive)]
+        insertion_sort_D = [InsertionSort(toSortOne),InsertionSort(toSortTwo), InsertionSort(toSortThree), InsertionSort(toSortFour), InsertionSort(toSortFive) ]
+        selection_sort_D = [SelectionSort(toSortOne),SelectionSort(toSortTwo),SelectionSort(toSortThree),SelectionSort(toSortFour),SelectionSort(toSortFive)]
+        merge_sort_D = [MergeSort(toSortOne),MergeSort(toSortTwo),MergeSort(toSortThree),MergeSort(toSortFour),MergeSort(toSortFive)]
+        quick_sort_D = [QuickSort(toSortOne),QuickSort(toSortTwo),QuickSort(toSortThree),QuickSort(toSortFour),QuickSort(toSortFive)]
 
-    runExperimentD(bubble_sort_D,N, "Bubble Sort Experiment D")
-    runExperimentD(insertion_sort_D,N, "Insert Sort Experiment D")
-    runExperimentD(selection_sort_D,N, "Selection Sort Experiment D")
-    runExperimentD(merge_sort_D,N, "Merge Sort Experiment D")
-    runExperimentD(quick_sort_D,N, "Quick Sort Experiment D")
+        bubble = runExperimentD(bubble_sort_D)
+        insert = runExperimentD(insertion_sort_D)
+        select = runExperimentD(selection_sort_D)
+        merge = runExperimentD(merge_sort_D)
+        quick = runExperimentD(quick_sort_D)
+
+        for i in range (5):
+            bubbleSortTimes[i].append(bubble[i])
+            insertionSortTimes[i].append(insert[i])
+            selectionSortTimes[i].append(select[i])
+            mergeSortTimes[i].append(merge[i])
+            quickSortTimes[i].append(quick[i])
+
+    #Get averages
+    bubbleSortAverages = [np.sum(bubbleSortTimes[i])/len(bubbleSortTimes[i]) for i in range (5)]
+    isnertionSortAverages = [np.sum(insertionSortTimes[i])/len(insertionSortTimes[i]) for i in range (5)]
+    selectionSortAverages = [np.sum(selectionSortTimes[i])/len(selectionSortTimes[i]) for i in range (5)]
+    mergeSortAverages = [np.sum(mergeSortTimes[i])/len(mergeSortTimes[i]) for i in range (5)]
+    quickSortAverages = [np.sum(quickSortTimes[i])/len(quickSortTimes[i]) for i in range (5)]
+
+    ##Save plots
+    draw_plot_D(bubbleSortAverages, np.sum(bubbleSortAverages)/len(bubbleSortAverages),"Bubble Sort Experiment D")
+    draw_plot_D(isnertionSortAverages, np.sum(isnertionSortAverages)/len(isnertionSortAverages),"Insert Sort Experiment D")
+    draw_plot_D(selectionSortAverages, np.sum(selectionSortAverages)/len(selectionSortAverages),"Selection Sort Experiment D")
+    draw_plot_D(mergeSortAverages, np.sum(mergeSortAverages)/len(mergeSortAverages),"Merge Sort Experiment D")
+    draw_plot_D(quickSortAverages, np.sum(quickSortAverages)/len(quickSortAverages),"Quick Sort Experiment D")
 
     return 0
 
 def experiment_E():
     
     # Insert your code for experiment E design here 
-    toSort = create_reverse_list(5000,10000) 
     N = 100
-    bubble_sort_E = BubbleSort(toSort)
-    insertion_sort_E = InsertionSort(toSort)
-    selection_sort_E = SelectionSort(toSort)
-    merge_sort_E = MergeSort(toSort)
-    quick_sort_E = QuickSort(toSort)
+    bubbleSortTimes = []
+    insertionSortTimes = []
+    selectionSortTimes = []
+    mergeSortTimes = []
+    quickSortTimes = []
 
-    runExperiment(bubble_sort_E,N, "Bubble Sort Experiment E")
-    runExperiment(insertion_sort_E,N, "Insert Sort Experiment E")
-    runExperiment(selection_sort_E,N, "Selection Sort Experiment E")
-    runExperiment(merge_sort_E,N, "Merge Sort Experiment E")
-    runExperiment(quick_sort_E,N, "Quick Sort Experiment E")
+    for i in range (N):
+        toSort = create_reverse_list(5000,10000) 
+        bubble_sort_E = BubbleSort(toSort)
+        insertion_sort_E = InsertionSort(toSort)
+        selection_sort_E = SelectionSort(toSort)
+        merge_sort_E = MergeSort(toSort)
+        quick_sort_E = QuickSort(toSort)
+
+        bubbleSortTimes.append(runExperiment(bubble_sort_E))
+        insertionSortTimes.append(runExperiment(insertion_sort_E))
+        selectionSortTimes.append(runExperiment(selection_sort_E))
+        mergeSortTimes.append(runExperiment(merge_sort_E))
+        quickSortTimes.append(runExperiment(quick_sort_E))
+    
+    #Calculate averages for each one
+    bubbleAverage = np.sum(bubbleSortTimes)/len(bubbleSortTimes)
+    insertAverage = np.sum(insertionSortTimes)/len(insertionSortTimes)
+    selectionAverage = np.sum(selectionSortTimes)/len(selectionSortTimes)
+    mergeSortAverage = np.sum(mergeSortTimes)/len(mergeSortTimes)
+    quickSortAverage = np.sum(quickSortTimes)/len(quickSortTimes)
+
+    #Save graphs
+    draw_plot(bubbleSortTimes,bubbleAverage, "Bubble Sort Experiment E")
+    draw_plot(insertionSortTimes,insertAverage, "Insert Sort Experiment E")
+    draw_plot(selectionSortTimes,selectionAverage, "Selection Sort Experiment E")
+    draw_plot(mergeSortTimes,mergeSortAverage, "Merge Sort Experiment E")
+    draw_plot(quickSortTimes,quickSortAverage, "Quick Sort Experiment E")
     return 0
 
 # call each experiment
-#experiment_A()
-#experiment_B()
-#experiment_C()
+experiment_A()
+experiment_B()
+experiment_C()
 experiment_D()
-#experiment_E()
+experiment_E()
 
