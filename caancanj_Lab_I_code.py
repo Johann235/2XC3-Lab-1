@@ -479,7 +479,7 @@ def experiment_E():
     quickSortTimes = []
 
     for i in range (N):
-        toSort = create_reverse_list(5000,10000) 
+        toSort = reduced_unique_list(5000,10000) 
         bubble_sort_E = BubbleSort(toSort)
         insertion_sort_E = InsertionSort(toSort)
         selection_sort_E = SelectionSort(toSort)
@@ -508,9 +508,9 @@ def experiment_E():
     return 0
 
 # call each experiment
-experiment_A()
-experiment_B()
-experiment_C()
-experiment_D()
+#experiment_A()
+#experiment_B()
+#experiment_C()
+#experiment_D()
 experiment_E()
 
